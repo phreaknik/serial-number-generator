@@ -9,10 +9,17 @@ import click
               help='The unique serial number to start generation with.')
 @click.option('--count', prompt='Quantity',
               help='The number of serial numbers to generate.')
-def generateSerials(model, variant, first, count):
-    """Print serial number formatted as <model_id>-<variant_code>-<serial>"""
+@click.option('--filename', prompt='File name (csv)',
+              help='The number of serial numbers to generate.')
+def generateSerials(model, variant, first, count, filename):
+    """Write serial numbers to specified file, formatted as <model_id>-<variant_code>-<serial>"""
+    file_handle = open(filename, 'w')
+    file_handle.write('Model: ,S/N: ,Bar-code: \n')
     for i in range(int(count)):
-        print(model + '-' + variant + '-' + format(i+int(first), '08'))
+        serial = format(i+int(first), '08')
+        file_handle.write(model + '-' + variant + ',' + serial + ',' + model + '-' + 
+                          variant + '-' + serial + '\n')
+    file_handle.close()
 
 if __name__ == '__main__':
     generateSerials()
